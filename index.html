@@ -24,53 +24,37 @@
         });
       }
 
-      async function go() {
-        console.log("Starting");
-        await wait(500);
-        console.log("Working");
-        await wait(500);
-
-        console.log("Ending");
-      }
-
-      // go();
-
       function handleError(err) {
-        console.log("Oh Nooooo!!!");
+        console.log("Ohh Noo");
         console.log(err);
       }
 
-      async function makeDinner() {
-        const pizza1 = makePizza(["chicken", "cheese"]);
-        const pizza2 = makePizza(["mushrooms", "onions"]);
+      async function go() {
+        // handling with the try / catch
+        // try {
+        //   const pizza = await makePizza(["pineapple"]);
+        //   console.log(pizza);
+        // } catch (err) {
+        //   console.log("Oh Nooo");
+        //   console.log(err);
+        // }
 
-        const [pep, mush] = await Promise.allSettled([pizza1, pizza2]);
-        console.log(pep, mush);
+        const pizza = await makePizza(["pineapple"]); // .catch(handleError);
+        console.log(pizza);
       }
 
-      makeDinner();
+      // catch it at run time  async await returns a promise
+      // go().catch(handleError);
 
-      // // different ways of using the async function
+      // error handling with Higher-Order Function
+      function makeSafe(fn, errorHandler) {
+        return function () {
+          fn().catch(errorHandler);
+        };
+      }
 
-      // // function declaration
-      // async function fd() {}
-
-      // // arrow function
-      // const arrowFn = async () => {};
-
-      // // callback function
-      // window.addEventListener("click", async function () {});
-
-      // // method function
-      // const person = {
-      //   // method
-      //   sayHi: async function () {},
-      //   // method shorthand
-      //   async sayHello() {},
-
-      //   // function property
-      //   sayHey: async () => {},
-      // };
+      const safeGo = makeSafe(go, handleError);
+      safeGo();
     </script>
   </body>
 </html>
