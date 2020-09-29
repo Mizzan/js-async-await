@@ -9,6 +9,11 @@
     <script>
       function makePizza(toppings = []) {
         return new Promise(function (resolve, reject) {
+          // reject if people try with pineapple
+          if (toppings.includes("pineapple")) {
+            reject("seriously, Get out 🍍");
+          }
+
           const amountOfTimeToBake = 500 + toppings.length * 200;
 
           // wait 1 sec for pizza to cook
@@ -103,16 +108,35 @@
       // });
 
       // promise race - brings the fastest one first then wait for others
-      const firstPizza = Promise.race([
-        pizzaPromise1,
-        pizzaPromise2,
-        pizzaPromise3,
-      ]);
+      // const firstPizza = Promise.race([
+      //   pizzaPromise1,
+      //   pizzaPromise2,
+      //   pizzaPromise3,
+      // ]);
 
-      firstPizza.then((pizza) => {
-        console.log(`You must be hungrey, here is the first one ready`);
-        console.log(pizza);
-      });
+      // firstPizza.then((pizza) => {
+      //   console.log(`You must be hungrey, here is the first one ready`);
+      //   console.log(pizza);
+      // });
+
+      // error handling with catch
+
+      function handleError(err) {
+        console.log("Oh Nooooo!!!");
+        console.log(err);
+      }
+      makePizza(["chesse", "pineapple"])
+        .then((pizza) => {
+          console.log(pizza);
+        })
+        .catch(handleError);
+
+      const p1 = makePizza(["coconut"]);
+      const p2 = makePizza(["pineapple"]);
+
+      const dinnerPizza = Promise.allSettled([p1, p2]);
+
+      dinnerPizza.then((pizza) => console.log(pizza)).catch(handleError);
     </script>
   </body>
 </html>
