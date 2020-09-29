@@ -3,11 +3,74 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title></title>
+    <title>Async-Await</title>
   </head>
   <body>
-    <h1></h1>
+    <script>
+      const wait = (ms = 0) =>
+        new Promise((resolve) => setTimeout(resolve, ms));
 
-    <script src="./app.js"></script>
+      function makePizza(toppings = []) {
+        return new Promise(function (resolve, reject) {
+          // checking if pineapple is toppings
+          if (toppings.includes("pineapple")) {
+            reject("Seriously, Get Out 🍍");
+          }
+          const amountOfTimeToBake = 500 + toppings.length * 200;
+          // wait one second for pizza to bake
+          setTimeout(function () {
+            resolve(`Here is your pizza 🍕 with toppings ${toppings}.`);
+          }, amountOfTimeToBake);
+        });
+      }
+
+      async function go() {
+        console.log("Starting");
+        await wait(500);
+        console.log("Working");
+        await wait(500);
+
+        console.log("Ending");
+      }
+
+      // go();
+
+      function handleError(err) {
+        console.log("Oh Nooooo!!!");
+        console.log(err);
+      }
+
+      async function makeDinner() {
+        const pizza1 = makePizza(["chicken", "cheese"]);
+        const pizza2 = makePizza(["mushrooms", "onions"]);
+
+        const [pep, mush] = await Promise.allSettled([pizza1, pizza2]);
+        console.log(pep, mush);
+      }
+
+      makeDinner();
+
+      // // different ways of using the async function
+
+      // // function declaration
+      // async function fd() {}
+
+      // // arrow function
+      // const arrowFn = async () => {};
+
+      // // callback function
+      // window.addEventListener("click", async function () {});
+
+      // // method function
+      // const person = {
+      //   // method
+      //   sayHi: async function () {},
+      //   // method shorthand
+      //   async sayHello() {},
+
+      //   // function property
+      //   sayHey: async () => {},
+      // };
+    </script>
   </body>
 </html>
