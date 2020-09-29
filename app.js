@@ -1,41 +1,53 @@
-// console.log("Starting");
+// making a function for wait
+const wait = (ms = 0) => new Promise((resolve) => setTimeout(resolve, ms));
 
-// setTimeout(() => {
-//   console.log("Running");
-// }, 3000);
-
-// console.log("Ending");
+// wait(200).then(function () {
+//   console.log("Done");
+// });
 
 // now making a small app with callback (setTimeout)
 
 const box = document.querySelector(".box");
 
-box.addEventListener("click", function (e) {
-  const boxEl = e.currentTarget;
+function animate(e) {
   // change the text to GO when clicked
-  boxEl.textContent = "GO";
+  const el = e.currentTarget;
+  el.textContent = "GO";
 
-  // Make it a circle after 2secs
-  setTimeout(function () {
-    boxEl.classList.add("circle");
-
-    // Make it red after 0.5s
-    setTimeout(function () {
-      boxEl.classList.add("red");
-
+  wait(200)
+    .then(() => {
+      // Make it a circle after 2secs
+      el.classList.add("circle");
+      return wait(500);
+    })
+    .then(() => {
+      // Make it red after 0.5s
+      el.classList.add("red");
+      return wait(500);
+    })
+    .then(() => {
       // Make it square after 0.25s
-      setTimeout(function () {
-        boxEl.classList.remove("circle");
-        // Make it purple after 0.3s
-        setTimeout(function () {
-          boxEl.classList.add("purple");
-          // fade out after 0.5s
-          setTimeout(function () {
-            boxEl.classList.add("fade");
-            // finish
-          }, 500);
-        }, 300);
-      }, 300);
-    }, 500);
-  }, 2000);
-});
+      el.classList.remove("circle");
+      return wait(500);
+    })
+    .then(() => {
+      // Make it purple after 0.3s
+      el.classList.add("purple");
+      return wait(500);
+    })
+    .then(() => {
+      // fade away the box
+      el.classList.add("fade");
+    });
+}
+
+box.addEventListener("click", animate);
+
+// box.addEventListener("click", function (e) {
+//   const boxEl = e.currentTarget;
+
+//   wait(2000).then(() => boxEl.classList.add("circle"));
+
+//   // fade out after 0.5s
+//   // finish
+// });
